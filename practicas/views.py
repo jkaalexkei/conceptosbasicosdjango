@@ -47,6 +47,8 @@ def archivosestaticos(request):
 
 def login(request):
     
+    print(request.method)
+    
     return render(request,'usuarios/login.html',{
         
     })
