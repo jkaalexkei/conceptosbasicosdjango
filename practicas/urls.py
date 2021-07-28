@@ -31,7 +31,8 @@ urlpatterns = [
     path('renderizado/',views.Renderizado,name='renderizado'),
     path('productos/',views.ListarArticulos,name='productos'),
     path('archivosestaticos/',views.archivosestaticos,name='archivosestaticos'),
-    path('usuarios/login',views.login,name='login')
+    path('usuarios/login',views.login_view,name='login'),
+    path('usuarios/iniciarsesion/',views.iniciarsesion,name='iniciarsesion'),
     
     
 ]

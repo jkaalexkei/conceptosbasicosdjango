@@ -1,6 +1,8 @@
 from django.http import HttpResponse #responde a una peticion de un cliente
 from django.http import HttpRequest
 from django.shortcuts import render #permite responder a un cliente una peticion mediante un documento html o template renderizado
+from django.contrib.auth import authenticate #funcion para trabajar con la autenticacion de usuarios
+from django.contrib.auth import login #importamos la funcion login de django para establecer una sesion
 
 def index(request):#almacena la peticion y se debe asociar a una url
     
@@ -45,10 +47,47 @@ def archivosestaticos(request):
     
     return render(request,'archivosestaticos.html')
 
-def login(request):
+def login_view(request):
     
-    print(request.method)
+    if request.method == 'POST':
+        
+        usuario = request.POST.get('usuario')#el metodo POST es un diccionario y lo cual hace que se pueda usar el metodo get()
+        password = request.POST.get('password')
+        
+        user = authenticate(username=usuario,password=password)#en caso de existir un usuario la funcion authenticate crea un objeto con ese usuario y se debe alamcenar en una variable en caso contrario retorna none. Una vez verificado esto se puede hacer una condicion para validar dicho usuario y crear esa condicion
+        
+        if user: #si existe un usuario se crea la sesion
+            login(request,user)#la funcion login recibe dos parametros(la peticion almacenada en el request y el usuario almacenado en la variable user)
+            print('usuario autenticado')
+        else:
+            print('USUARIO NO AUTENTICADO')
+
+        
     
     return render(request,'usuarios/login.html',{
+        
+        
+    })
+
+
+def iniciarsesion(request):
+
+    if request.method == 'POST':
+
+        usuario = request.POST.get('username')
+        clave = request.POST.get('password')
+        
+        user = authenticate(username=usuario,password=clave)#AUTENTICACION DE USUARIO
+        
+        if user:#SI HAY UN USUARIO AUTENTICADO
+            login(request,user)#SE ESTABLE LA SESION CON EL USUARIO AUTENTICADO
+            print('el usuario %s a iniciado sesion' %(usuario))
+        else:
+            print('Ese usuario no existe... ')
+            
+    
+    
+    return render(request,'usuarios/iniciarsesion.html',{
+        
         
     })
