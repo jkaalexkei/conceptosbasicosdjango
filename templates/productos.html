@@ -9,6 +9,27 @@
 </head>
 <body>
     <div class="container">
+        {% if messages %}<!--si ha generado un mensaje desde el servidor mediante esta instruccion lo capturamos y evaluamos-->
+            
+            {% for mensaje in messages  %} <!--aca recorremos los mensajes -->
+                    
+                    {% if mensaje.tags == 'success' %}<!--validamos que el tipo de mensaje sea de tipo success-->
+                        <div class="alert alert-success">
+                            {{mensaje}} <!--mostramos el mensaje generado-->
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% else %}<!--en caso contrario-->
+                        <div class="alert alert-danger">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            {{mensaje}} <!--mostramos el mensaje generado-->
+                            
+                        </div>
+                    {% endif %}
+                        
+                
+            {% endfor %}
+                
+        {% endif %}
         <h2>{{empresa|upper}}</h2>
         <div class="row bg-info">
             <div class="col-4 border border-1 text-center fw-bold text-uppercase p-2">Nombre</div>
@@ -16,6 +37,7 @@
             <div class="col-4 border border-1 text-center fw-bold text-uppercase p-2">Estado</div>
         </div>
         <div class="row">
+            
                         
                 {# aca empleamos bucle for para recorrer los elementos del diccionario productos y mendiante un condicional comprobamos el estado y cambiamos el valor del atributo estado en caso que sea verdadero mostramos disponible y en caso contrario no disponible #}
      <!-- ..................................................................................... -->

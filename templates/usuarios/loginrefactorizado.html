@@ -14,21 +14,10 @@
             
             {% for mensaje in messages  %} <!--aca recorremos los mensajes -->
                     
-                    {% if mensaje.tags == 'success' %}<!--validamos que el tipo de mensaje sea de tipo success esto mediante la propiedad tags-->
-                        <div class="alert alert-success">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            {{mensaje}} <!--mostramos el mensaje generado-->
-                            
-                        </div>
-                    {% else %}<!--en caso contrario-->
-                        <div class="alert alert-danger">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            {{mensaje}} <!--mostramos el mensaje generado-->
-                            
-                        </div>
-                    {% endif %}
-                        
-                
+                    <div class="alert {% if mensaje.tags == 'success' %} alert-info{% else %} alert-warning {% endif %}"><!--podemos integrar las condiciones dentro de las llamadas a las clases para evaluar segun determinada condicion-->
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        {{mensaje}}
+                    </div>
             {% endfor %}
                 
         {% endif %}

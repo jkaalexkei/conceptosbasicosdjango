@@ -31,8 +31,10 @@ urlpatterns = [
     path('renderizado/',views.Renderizado,name='renderizado'),
     path('productos/',views.ListarArticulos,name='productos'),
     path('archivosestaticos/',views.archivosestaticos,name='archivosestaticos'),
-    path('usuarios/login',views.login_view,name='login'),
-    path('usuarios/iniciarsesion/',views.iniciarsesion,name='iniciarsesion'),
+    path('usuarios/login/',views.login_view,name='login'),
+    path('usuarios/logout/',views.logout_view,name='logout'),
+    path('usuarios/registro/',views.registro,name='registro')
+    # path('usuarios/iniciarsesion/',views.inicio,name='iniciarsesion'),
     
     
 ]

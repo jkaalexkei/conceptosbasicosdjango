@@ -1,8 +1,12 @@
+from practicas.forms import RegistroForm
 from django.http import HttpResponse #responde a una peticion de un cliente
 from django.http import HttpRequest
-from django.shortcuts import render #permite responder a un cliente una peticion mediante un documento html o template renderizado
-from django.contrib.auth import authenticate #funcion para trabajar con la autenticacion de usuarios
-from django.contrib.auth import login #importamos la funcion login de django para establecer una sesion
+from django.shortcuts import redirect, render #permite responder a un cliente una peticion mediante un documento html o template renderizado
+from django.contrib.auth import authenticate, logout #funcion para trabajar con la autenticacion de usuarios
+from django.contrib.auth import login,logout #importamos la funcion login de django para establecer una sesion
+from django.contrib import messages #permite enviar mensajes del servidor al cliente
+from .forms import RegistroForm #importamos la clase RegistroForm del archivo forms.py
+
 
 def index(request):#almacena la peticion y se debe asociar a una url
     
@@ -58,13 +62,19 @@ def login_view(request):
         
         if user: #si existe un usuario se crea la sesion
             login(request,user)#la funcion login recibe dos parametros(la peticion almacenada en el request y el usuario almacenado en la variable user)
-            print('usuario autenticado')
+            # print('usuario autenticado')
+            
+            messages.success(request,'Bienvenido {}'.format(user.username))#los mensajes admiten dos parametros la peticion request y el mensaje que se va a enviar
+            
+            return redirect('productos')#redirige a una pagina en particular
+        
         else:
-            print('USUARIO NO AUTENTICADO')
+            # print('USUARIO NO AUTENTICADO')
+            messages.error(request,'usuario no valido')
 
         
     
-    return render(request,'usuarios/login.html',{
+    return render(request,'usuarios/loginrefactorizado.html',{
         
         
     })
@@ -90,4 +100,43 @@ def iniciarsesion(request):
     return render(request,'usuarios/iniciarsesion.html',{
         
         
+    })
+
+
+def logout_view(request):
+
+        logout(request)#la funcion logout recibe como parametro la peticion y esta a su vez se encarga de cerrar la sesion
+        messages.success(request,'sesion cerrada exitosamente')#se le informa al usuario que la sesion se ha cerrado
+        return redirect('login')#una vez cerrada la sesion redirige al login o pagina principal
+
+
+"""
+def inicio(request):
+    
+    if request.method == 'POST':
+        usu = request.POST.get('username')
+        pas = request.POST.get('password')
+        
+        usuario = authenticate(username = usu, password=pas)
+        
+        if usuario:
+            login(request,usuario)
+            messages.success(request,'inicio correcto')
+            return redirect('productos')
+            
+        else:
+            messages.error(request,'ocurrio un problema en el inicio de sesión')
+    
+    return render(request,'usuarios/iniciarsesion.html')
+    
+    
+"""
+
+def registro(request):
+    
+    formulario = RegistroForm()
+    
+    return render(request,'usuarios/registro.html',{
+        
+        'form':formulario #agregamos el formulario al contexto
     })
