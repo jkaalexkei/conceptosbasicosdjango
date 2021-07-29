@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Inventario</title>
+</head>
+<body>
+    <div class="container">
+        {% if messages %}<!--si ha generado un mensaje desde el servidor mediante esta instruccion lo capturamos y evaluamos-->
+            
+            {% for mensaje in messages  %} <!--aca recorremos los mensajes -->
+                    
+                    {% if mensaje.tags == 'success' %}<!--validamos que el tipo de mensaje sea de tipo success-->
+                        <div class="alert alert-success">
+                            {{mensaje}} <!--mostramos el mensaje generado-->
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% else %}<!--en caso contrario-->
+                        <div class="alert alert-danger">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            {{mensaje}} <!--mostramos el mensaje generado-->
+                            
+                        </div>
+                    {% endif %}
+                        
+                
+            {% endfor %}
+                
+        {% endif %}
+        <h2>{{empresa|upper}}</h2>
+
+        
+        <div class="row bg-info">
+            
+                <div class="col-4 border border-1 text-center fw-bold text-uppercase p-2">Nombre de Usuario</div>
+                <div class="col-8 border border-1 text-center fw-bold text-uppercase p-2">Correo</div>
+         
+        </div>
+            
+        <div class="row">
+            {% for usr in usuarios %}
+                <div class="col-4 border border-1 text-center fw-bold text-uppercase p-2">{{usr.username}}</div>
+                <div class="col-8 border border-1 text-center fw-bold text-uppercase p-2">{{usr.email}}</div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            
+                        
+                {# aca empleamos bucle for para recorrer los elementos del diccionario productos y mendiante un condicional comprobamos el estado y cambiamos el valor del atributo estado en caso que sea verdadero mostramos disponible y en caso contrario no disponible #}
+     <!-- ..................................................................................... -->
+                
+                
+                    
+                    
+                    
+                        
+                         
+                
+                
+            
+        </div>
+        
+    </div>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+</html>

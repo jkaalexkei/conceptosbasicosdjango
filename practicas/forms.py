@@ -19,6 +19,8 @@ class RegistroForm(forms.Form):#clase para crear un formulario mediante una clas
     
     password = forms.CharField(required=True,widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'password' }))
     
+    password2 = forms.CharField(label="confirmar password",required=True,widget=forms.PasswordInput(attrs={'class':'form-control', }))
+    
     #para mostrar este formulario se debe crerar una instancia en el archivo views de la aplicacion
     
     def clean_username(self):
@@ -30,7 +32,34 @@ class RegistroForm(forms.Form):#clase para crear un formulario mediante una clas
 
                 raise forms.ValidationError('el usuario ya existe oesta en uso')#en caso que exista un usuario devoolvemos un mensaje de error
         else:
-                return usuario #retornamos el nuevo usuario
+                return usuario #retornamos el nuevo usuario    
+        
+    def clean_email(self):
+            email = self.cleaned_data.get('email')
+            if User.objects.filter(email=email).exists():
+                    raise forms.ValidationError('el correo ya existe')
+            else:
+                    return email
+
+    def clean(self):#se sobreescribe el metodo clean si y solo si necesitamos validar campos que dependan uno de otros como es el caso que el campo password2 depende del password 
+            cleaned_data = super().clean() #obtenemos todos los campos del formulario mediante la funcion super
+            
+            #aca validamos si ambos campos del password coinciden
+            if cleaned_data.get('password2') != cleaned_data.get('password'):
+                    
+                    self.add_error('password2','el password no coincide')#agregamos un error mediante el metodo add_error el cual recibe dos argumentos. el nombre del elemento al que queremos hacer referencia y el mensaje de error que se le pondra
+                            
+    
+    #delegar la posibilidad de crear nuevos usuarios al formulario
+    
+    def save(self):#usamos el metodo 
+            
+           return User.objects.create_user(
+                    self.cleaned_data.get('username'),
+                    self.cleaned_data.get('email'),
+                    self.cleaned_data.get('password'),
+            )
+
 
 
 

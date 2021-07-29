@@ -1,0 +1,19 @@
+<p>soy el archivo mensajes </p>
+{% if messages %}
+            {% for mensaje in messages %}
+                 {% if mensaje.tags == 'success' %}
+                        <div class="alert alert-success">
+                            {{mensaje}}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                {% else %}
+                        <div class="alert alert-danger">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            {{mensaje}}
+                        </div>
+                 {% endif %}
+
+
+            {% endfor %}
+
+        {% endif %}

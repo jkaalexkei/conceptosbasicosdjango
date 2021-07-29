@@ -1,0 +1,24 @@
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <a href="#" class="navbar-brand">Navegacion</a>
+    <button type="button" name="button" class="navbar-toggler navbar-toggler-rigth" data-toggle="collapse" data-target="#navb" >
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div id="navb" class="navbar-collapse collapse hide">
+        <ul class="nav navbar-nav ml-auto">
+            <li class="navbar-item">
+                <a href="{% url 'login' %}" class="nav-link">iniciar sesion</a>
+            </li>
+
+            <li class="navbar-item">
+                <a href="{% url 'registro' %}" class="nav-link">Registro</a>
+            </li>
+
+            <li class="navbar-item">
+                <a href="{% url 'logout' %}" class="nav-link">Cerrar Sesión</a>
+            </li>
+
+        </ul>
+
+        </ul>
+    </div>
+</nav>

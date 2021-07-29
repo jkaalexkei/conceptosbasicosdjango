@@ -12,8 +12,10 @@ from django.contrib.auth.models import User #con esta clase podemos crear nuevos
 
 def index(request):#almacena la peticion y se debe asociar a una url
     
-    return HttpResponse('Hola mundo')#retornamos la respuesta 
+    return render(request,'index.html')#retornamos la respuesta 
 
+def base(request):
+    return render(request,'tpl_base.html')
 
 def saludo(request):
     
@@ -47,6 +49,14 @@ def ListarArticulos(request):
             
         ]
     })
+
+def listadeusuarios(request):
+    
+    usuarios = User.objects.all()
+    
+    contexto = {'usuarios':usuarios}
+    
+    return render(request,'usuarios/listadeusuarios.html',contexto)
 
 
 def archivosestaticos(request):
@@ -141,20 +151,40 @@ def registro(request):
     #condicionamos si se ha enviado algo en el formulario mediante el metodo post y si el formulario es valido
     if request.method=='POST' and formulario.is_valid(): 
         #asignamos el valor recibido a la variable correspondiente y asi obtener el valor de cada campo mediante el atributo cleaned_data
+        """
         username = formulario.cleaned_data.get('username')
         email = formulario.cleaned_data.get('email')
-        password = formulario.cleaned_data.get('password')
+        password = formulario.cleaned_data.get('password')"""
         #para generar un nuevo usuario colocamos la siguiente instruccion la cual genera un objeto de tipo usuario el cual se debe almacenar en una variable
-        usuario = User.objects.create_user(username,email,password)#crea un usuario pero sin permisos de administrador
+        
+        usuario = formulario.save()
+        """User.objects.create_user(username,email,password)"""#crea un usuario pero sin permisos de administrador
         
         #validamos si se ha creado el usuario
 
         if usuario:
             login(request,usuario)#validamos si se ha creado la sesion correspondiente a ese usuario
             messages.success(request,'creado existosamente')#mensaje de confirmacion
-            return redirect('productos')#redirigimos a una pagina en particular
+            return redirect('listadeusuarios')#redirigimos a una pagina en particular
     
     return render(request,'usuarios/registro.html',{
         
         'form':formulario #agregamos el formulario al contexto
     })
+    
+
+def crearusuariosnuevos(request):
+    
+    formulario = RegistroForm(request.POST or None)
+    
+    if request.method=='POST' and formulario.is_valid(): 
+        
+        usuario = formulario.save()#aca se llama al metodo save() del archivo forms.py
+        if usuario:
+             login(request,usuario)
+             messages.success(request,'creado existosamente')
+             return redirect('listadeusuarios')
+    
+    return render(request,'usuarios/registro.html',{
+
+                        'form':formulario})
