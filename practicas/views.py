@@ -1,3 +1,4 @@
+from django.forms.forms import Form
 from practicas.forms import RegistroForm
 from django.http import HttpResponse #responde a una peticion de un cliente
 from django.http import HttpRequest
@@ -6,6 +7,7 @@ from django.contrib.auth import authenticate, logout #funcion para trabajar con 
 from django.contrib.auth import login,logout #importamos la funcion login de django para establecer una sesion
 from django.contrib import messages #permite enviar mensajes del servidor al cliente
 from .forms import RegistroForm #importamos la clase RegistroForm del archivo forms.py
+from django.contrib.auth.models import User #con esta clase podemos crear nuevos usuarios
 
 
 def index(request):#almacena la peticion y se debe asociar a una url
@@ -134,7 +136,23 @@ def inicio(request):
 
 def registro(request):
     
-    formulario = RegistroForm()
+    formulario = RegistroForm(request.POST or None)# generamos una instancia de la clase registroform y esta tienen sus metodos y propiedades vacios. Dentro de la zona de argumentos se coloca dicha expresion para comprobar que se hallan enviado datos mediante el formulario y esos datos se almacenan en la variable formulario, a su vez dentro de la zona de parametros tambien puede ir un diccionario (clave:valor) con los datos que se vayan a procesar en el formulario. En caso que no hayan datos generados mediante el metodo post se genera un formulario vacio
+
+    #condicionamos si se ha enviado algo en el formulario mediante el metodo post y si el formulario es valido
+    if request.method=='POST' and formulario.is_valid(): 
+        #asignamos el valor recibido a la variable correspondiente y asi obtener el valor de cada campo mediante el atributo cleaned_data
+        username = formulario.cleaned_data.get('username')
+        email = formulario.cleaned_data.get('email')
+        password = formulario.cleaned_data.get('password')
+        #para generar un nuevo usuario colocamos la siguiente instruccion la cual genera un objeto de tipo usuario el cual se debe almacenar en una variable
+        usuario = User.objects.create_user(username,email,password)#crea un usuario pero sin permisos de administrador
+        
+        #validamos si se ha creado el usuario
+
+        if usuario:
+            login(request,usuario)#validamos si se ha creado la sesion correspondiente a ese usuario
+            messages.success(request,'creado existosamente')#mensaje de confirmacion
+            return redirect('productos')#redirigimos a una pagina en particular
     
     return render(request,'usuarios/registro.html',{
         
